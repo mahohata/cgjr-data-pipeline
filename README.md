@@ -10,7 +10,7 @@ Open this repository folder in VS Code, install the four required R packages, se
 
 - Open New Terminal
 - Click on "+" -> "R Terminal"
-- Set your working directory by running 'setwd("your_path")' in the terminal. E.g. `setwd("c:/Users/wb566769/OneDrive - WBG/Documents/cgjr-data-pipeline")`
+- Set your working directory by running 'setwd("your_path")' in the terminal. E.g. `setwd("c:/Users/wb541423/OneDrive - WBG/Documents/cgjr-data-pipeline")`
 - Check the working directory by running `getwd()`
 - Copy the following code then press enter: `install.packages(c("WDI", "dplyr", "ggplot2", "Rilostat"))`
 - Create and publish a branch named `first name`. E.g. `yann-branch`; do not work directly on `main`.
@@ -23,7 +23,9 @@ WDI supplies GDP growth, GDP per capita (constant 2015 US$) and population.
 Source each script, in this order:
 
  R/01_download_wdi.R
+ R/01b_download_ilostat.R
  R/02_clean_wdi.R
+ R/02b_clean_ilostat.R
  R/03_merge_data.R
  R/04_analysis.R
  R/05_quality_checks.R
@@ -33,18 +35,24 @@ To source a script, open it in the editor and click on the arrow on the top righ
 
 
 The scripts create their data and output directories automatically. Downloads
-and generated outputs are ignored by Git. Expected baseline outputs are
-`outputs/figures/gdp_growth.png` and `outputs/tables/country_summary.csv`.
+and generated outputs are ignored by Git. Expected outputs are
+`outputs/figures/gdp_growth.png`,
+`outputs/figures/ilostat_employment_to_population.png`, and
+`outputs/tables/country_summary.csv`.
 The summary is intended to describe the latest available GDP-growth observation.
 Investigate warnings and failed checks, even when plots are produced.
+The ILOSTAT scripts save the raw modelled-estimates download and retrieval
+metadata under `data/raw/`, and the filtered employment-to-population series
+under `data/processed/ilostat_long.csv`.
 
 ## Your Work
 
 1. Explain the workflow before editing; inspect the configuration and scripts.
 2. Diagnose and fix at least three issues. See Issue solution if needed.
-3. Add `R/01b_download_ilostat.R` and `R/02b_clean_ilostat.R`. Use an annual
-   employment-to-population ratio for total sex, age 15+ (series ID: EMP_2WAP_SEX_AGE_RT_A).
-4. Filter to the configured countries and years. Keep raw files in `data/raw/`.
+3. Review the ILOSTAT ingestion scripts and verify the selected annual
+   employment-to-population series and its source metadata.
+4. Run the ILOSTAT scripts to filter the configured countries and years. Raw
+   downloads remain in `data/raw/`.
 5. Merge using explicit country-year keys after checking uniqueness and types.
    Report matched, WDI-only and ILO-only rows before deciding on the sample.
 6. Add an ILOSTAT trend plot.
